@@ -5,6 +5,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDis
 from pathlib import Path
 import argparse
 import matplotlib.pyplot as plt
+import joblib
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--test-size", type=float, default=0.2)
@@ -34,6 +35,11 @@ display = ConfusionMatrixDisplay(confusion_matrix=confusion_matrix(y_test, y_pre
                                  display_labels=iris.target_names)
 
 display.plot()
-path = Path(__file__).parent.joinpath("../outputs/confusion").resolve()
-path.mkdir(parents=True, exist_ok=True)
-plt.savefig(str(path) + "/_matrix.png")
+matrix_path = Path(__file__).parent.joinpath("../outputs/confusion").resolve()
+matrix_path.mkdir(parents=True, exist_ok=True)
+plt.savefig(str(matrix_path) + "/_matrix.png")
+
+# 5. persist model
+model_path = Path(__file__).parent.joinpath("../outputs/model").resolve()
+model_path.mkdir(exist_ok=True)
+joblib.dump(model, str(model_path) + "/trained_model.joblib")
